@@ -18,7 +18,7 @@ AWS lambda，开始时用LXC隔离功能，用虚拟化隔离用户，一个用�
 容器的本质是一个进程，容器壁虚拟化启动快很多，内存开销也小很多。主要利用Linux的Cgroups技术对进程进行资源限制。
 比如cgroups可以限制进程的CPU核数、特定的内存大小，如果资源超过限制则暂停或杀死。cgroup一个很完整的控制功能，可以限制CPU、内存、磁盘。</br>
 在/sys/fs/cgroup/cpu/docker目录中，linux会为每个容器创建一个cgroup目录，以容器的长ID命名。</br>
-</br>
+</br></br>
 Docker利用namespace机制来进行容器间的隔离。
 Linux中有6种namespace，分别对应6种资源：Mount， UTS， IPC， PID，Network和User
 - Mount namespace：让容器看上去拥有整个文件系统。
@@ -33,8 +33,8 @@ Linux中有6种namespace，分别对应6种资源：Mount， UTS， IPC， PID�
 
 
 ### LXC(Linux Container)
-Linux容器，将应用软件打包成一个软件容器，内含软件本身代码，以及需要的操作系统核心和库。LXC与Docker类似，也是利用了Linux Cgroups和namespace功能为软件提供一个独立的环境。</br>
-使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 最初的Docker也是基于LXC实现的。</br>
+Linux容器，将应用软件打包成一个软件容器，内含软件本身代码，以及需要的操作系统核心和库。LXC与Docker类似，也是利用了Linux Cgroups和namespace功能为软件提供一个独立的环境。</br></br>
+使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 最初的Docker也是基于LXC实现的。</br></br>
 用Linux的chroot命令为容器提供一个自己的根目录。
 
 
