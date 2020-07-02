@@ -10,10 +10,15 @@ firecracker移除了PCI总线，取消了VGA显示，音频、视频、USB外设
 docker在LXC的基础上进行了改进，提供了一个更高层的控制工具。
 - 跨主机部署：docker 定义了镜像格式，使同一个镜像文件在任何可运行 docker 的机器中运行。LXC程序的执行依赖于机器的特定配置。
 - 自动构建、版本管理、组件重用、工具生态链等等
-
 </br></br>
 AWS lambda，开始时用LXC隔离功能，用虚拟化隔离用户，一个用户可以在一个VM里运行多个功能应用。
 Lambda的function是比较小的，所以相对来说虚拟化的开销就比较大。
+</br></br>
+firecracker使用KVM，但是替换掉了VMM，用安全语言编写了一个VMM(Firecracker)。
+firecracker大约有50K Rust代码，比QEMU少96%，**Intel的Cloud Hypervisor采取了和Firecracker相似的思路**，甚至共享了很多代码。NEMU则是裁剪了QEMU。
+firecracker利用了Linux的功能，比如将block IO传给Linux kernel处理，Linux进程调度器和内存管理机制。
+firecracker可以用ps命令来可以查看所有MicroVM，还有如top，vmstat和kill命令都可以使用。firecracker基于Google的VMM crosvm实现的，复用了一些crosvm的组件。但firecracker比crosvm代码少一半。firecracker提供了有限的设备模拟：网络和block设备、串口和部分i8042。firecracker在网络和block模拟中使用了virtio，virtio block实现用了1400行代码。选择用block设备而不是文件系统，是因为**文件系统代码量大且复杂**。仅向用户提供block IO可以更好地保护主机kernel。
+
 
 ### 容器原理
 容器的本质是一个进程，容器壁虚拟化启动快很多，内存开销也小很多。主要利用Linux的Cgroups技术对进程进行资源限制。
@@ -51,7 +56,7 @@ Linux容器，将应用软件打包成一个软件容器，内含软件本身代
 
 
 ### Unikernel
-在Unikernel的操作系统中，**所有程序与底层的核心驱动都运行在一起**，不存在运行时状态上下文切换的额外开销。将每个应用程序在编译时可以直接指定引入特定的驱动和核心library，相当于每个程序都是自带操作系统的，而且是单独定制裁剪的操作系统。
+在Unikernel的操作系统中，**所有程序与底层的核心驱动都运行在一起**，不存在运行时状态上下文切换的额外开销。将每个应用程序在编译时可以直接指定引入特定的驱动和核心library，相当于每个程序都是自带操作系统的，而且是单独定制裁剪的操作系统。Unikernel 是与某种语言紧密相关的，**一种 unikernel 只能用一种语言写程序**
 </br></br>
 通过Unikernel系统方式构建出来的应用程序都是可以独立发布和直接运行在虚拟化平台上的，**一个应用服务就是一个操作系统**，从而形成规模极大的操作系统集群。Unikernel系统的运行环境通常是虚拟化的基础设施，而不是那些嵌入式硬件设备。通常来说，Unikernel操作系统既不能兼容Linux或Windows软件，也不能运行Docker容器（目前还没有能运行Docker的Unikernel系统）。Unikernel也是一种不可变的基础设施（Immutable Infrastructure），**Unikernel系统一旦编译完整就不可改变的**，想要对其中的内容进行重新定制的唯一办法就是修改源码然后重新编译。
 </br></br>
