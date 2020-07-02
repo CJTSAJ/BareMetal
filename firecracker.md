@@ -33,9 +33,14 @@ Linux中有6种namespace，分别对应6种资源：Mount， UTS， IPC， PID�
 
 
 ### LXC(Linux Container)
-Linux容器，将应用软件打包成一个软件容器，内含软件本身代码，以及需要的操作系统核心和库。LXC与Docker类似，也是利用了Linux Cgroups和namespace功能为软件提供一个独立的环境。</br></br>
+Linux容器，将应用软件打包成一个软件容器，内含软件本身代码，以及需要的操作系统核心和库。LXC与Docker类似，也是利用了**Linux Cgroups和namespace**功能为软件提供一个独立的环境。</br></br>
 使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 最初的Docker也是基于LXC实现的。</br></br>
 用Linux的chroot命令为容器提供一个自己的根目录。
+</br></br>
+**seccomp** 是 Linux 内核提供的一种应用程序沙箱机制,seccomp 通过只允许应用程序调用 exit(), sigreturn(), read() 和 write() 四种系统调用来达到沙箱的效果。如果应用程序调用了除了这四种之外的系统调用， kernel 会向进程发送 SIGKILL 信号。
+</br></br>
+**seccomp-bpf** 是 seccomp 的一个扩展，它可以通过配置来允许应用程序调用其他的系统调用。
+
 
 
 
