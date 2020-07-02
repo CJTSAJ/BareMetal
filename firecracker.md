@@ -2,7 +2,7 @@
 与容器和传统虚拟机都不同，综合两者有点，既要安全隔离，也要性能开销。主要用于无服务和容器应用。</br></br>
 firecracker轻量级虚拟机，在microVM内仅单独运行一个容器或者仅运行一个应用Pod，不同应用之间实现了虚拟化技别的隔离。每个应用不再共享OS内核。 </br>
 每个MicroVM都以KVM进程的方式运行。
-firecracker使用内存安全的Rust语言编写
+firecracker使用内存安全的Rust语言编写，专门为无服务计算场景提供安全高效的运行时
 
 firecracker提升了容器的隔离性和安全性。</br>
 firecracker移除了PCI总线，取消了VGA显示，音频、视频、USB外设都不支持，没有BIOS，也不做任何指令模拟，不是一台完整的虚拟计算机。</br>
@@ -13,6 +13,7 @@ docker在LXC的基础上进行了改进，提供了一个更高层的控制工�
 </br></br>
 AWS lambda，开始时用LXC隔离功能，用虚拟化隔离用户，一个用户可以在一个VM里运行多个功能应用。
 Lambda的function是比较小的，所以相对来说虚拟化的开销就比较大。
+
 </br></br>
 firecracker使用KVM，但是替换掉了VMM，用安全语言编写了一个VMM(Firecracker)。
 firecracker大约有50K Rust代码，比QEMU少96%，**Intel的Cloud Hypervisor采取了和Firecracker相似的思路**，甚至共享了很多代码。NEMU则是裁剪了QEMU。
@@ -65,4 +66,11 @@ Linux容器，将应用软件打包成一个软件容器，内含软件本身代
 **LightVM**：轻量级虚拟机，虚拟机比容器奇动慢、占用内存多。容器隔离安全性不好。lightVM可以在2.3ms内驱动一个虚拟机，Linux启动一个进程需要1ms,两者都小于容器的启动速度。</br></br>
 首要是缩小虚拟机的image大小和运行时内存的footprint(内存占用)。通过观察发现，多数VM和Container都是运行单应用的，若将VM的功能裁剪至刚好仅能满足所运行应用的需求，将可以极大地降低VM的内存占用。为此作者尝试了unikernel和Tinyx两种方式来创建适合单应用运行的最小镜像。 - Unikernel：小型虚拟机，其中的简约操作系统（例如MiniOS ）直接链接目标应用程序。 - Tinyx：作者开发的一个工具，用来为指定的应用程序创建一个小型Linux发行版本。
 
-
+### AWS Lambda
+如图，用户请求通过ALB(load balance)转发给Front end，接着转发给Worker manager，然后初始化Worker，Worker准备初始化沙箱执行环境，完成后原路返回给Front end。然后由Front end触发执行函数。</br>
+![](https://github.com/CJTSAJ/BareMetal/blob/master/picture/AWS%20lambda.png)
+</br>
+### Hyper-Threading
+hyperthreading技术的关键点就是：当我们在处理器中执行代码时，很多时候处理器并不会使用到全部的计算能力，部分计算能力会处于空闲状态，而hyperthreading技术会更大程度地“压榨”处理器。举个例子，如果一个线程必须要等到一些数据加载到缓存中以后才能继续执行，此时**CPU可以切换到另一个线程去执行**，而不用去处于空闲状态，等待当前线程的IO执行完毕。一个传统的处理器在线程之间切换大约需要20000时钟周期，而一个具有Hyperthreading技术的处理器只需要1个时钟周期，**大大减小了线程之间切换的成本**。**两个逻辑处理器是共享这颗CPU的所有执行资源**。
+</br></br>
+逻辑核心：Hyper-threading 使操作系统认为处理器的核心数是实际核心数的2倍，因此如果有4个核心的处理器，操作系统会认为处理器有8个核心。
