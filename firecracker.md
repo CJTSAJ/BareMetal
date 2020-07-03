@@ -1,25 +1,26 @@
 ### firecracker
-与容器和传统虚拟机都不同，综合两者有点，既要安全隔离，也要性能开销。主要用于无服务和容器应用。</br></br>
-firecracker轻量级虚拟机，在microVM内仅单独运行一个容器或者仅运行一个应用Pod，不同应用之间实现了虚拟化技别的隔离。每个应用不再共享OS内核。 </br>
-每个MicroVM都以KVM进程的方式运行。
-firecracker使用内存安全的Rust语言编写，专门为无服务计算场景提供安全高效的运行时
+与容器和传统虚拟机都不同，综合两者有点，**既要安全隔离，也要性能开销**。主要用于无服务和容器应用。firecracker轻量级虚拟机，在microVM内仅单独运行一个容器或者仅运行一个应用Pod，不同应用之间实现了虚拟化技别的隔离。每个应用不再共享OS内核。每个MicroVM都以KVM进程的方式运行。firecracker使用**内存安全的Rust语言编写**，专门为无服务计算场景提供安全高效的运行时
 
-firecracker提升了容器的隔离性和安全性。</br>
-firecracker移除了PCI总线，取消了VGA显示，音频、视频、USB外设都不支持，没有BIOS，也不做任何指令模拟，不是一台完整的虚拟计算机。</br>
-虚拟机内使用的OS也是定制的精简Linux，所以其启动步骤和加载项远少于传统虚拟机，启动非常快。现在可以在125ms内启动虚拟机，每秒150台，内存开销小于5MB，并行运行4000台。</br>
+firecracker提升了容器的隔离性和安全性。**firecracker移除了PCI总线，取消了VGA显示，音频、视频、USB外设都不支持，没有BIOS，也不做任何指令模拟**，不是一台完整的虚拟计算机。**虚拟机内使用的OS也是定制的精简Linux**，所以其启动步骤和加载项远少于传统虚拟机，启动非常快。现在可以在125ms内启动虚拟机，每秒150台，内存开销小于5MB，并行运行4000台。</br>
 docker在LXC的基础上进行了改进，提供了一个更高层的控制工具。
 - 跨主机部署：docker 定义了镜像格式，使同一个镜像文件在任何可运行 docker 的机器中运行。LXC程序的执行依赖于机器的特定配置。
 - 自动构建、版本管理、组件重用、工具生态链等等
-</br></br>
-AWS lambda，开始时用LXC隔离功能，用虚拟化隔离用户，一个用户可以在一个VM里运行多个功能应用。
-Lambda的function是比较小的，所以相对来说虚拟化的开销就比较大。
 
 </br></br>
-firecracker使用KVM，但是替换掉了VMM，用安全语言编写了一个VMM(Firecracker)。
-firecracker大约有50K Rust代码，比QEMU少96%，**Intel的Cloud Hypervisor采取了和Firecracker相似的思路**，甚至共享了很多代码。NEMU则是裁剪了QEMU。
-firecracker利用了Linux的功能，比如将block IO传给Linux kernel处理，Linux进程调度器和内存管理机制。
-firecracker可以用ps命令来可以查看所有MicroVM，还有如top，vmstat和kill命令都可以使用。firecracker基于Google的VMM crosvm实现的，复用了一些crosvm的组件。但firecracker比crosvm代码少一半。firecracker提供了有限的设备模拟：网络和block设备、串口和部分i8042。firecracker在网络和block模拟中使用了virtio，virtio block实现用了1400行代码。选择用block设备而不是文件系统，是因为**文件系统代码量大且复杂**。仅向用户提供block IO可以更好地保护主机kernel。
+AWS lambda，开始时用LXC隔离功能，用虚拟化隔离用户，一个用户可以在一个VM里运行多个功能应用。Lambda的function是比较小的，所以相对来说虚拟化的开销就比较大。
 
+</br></br>
+firecracker使用KVM，但是替换掉了VMM，用安全语言编写了一个VMM(Firecracker)。firecracker大约有50K Rust代码，比QEMU少96%，**Intel的Cloud Hypervisor采取了和Firecracker相似的思路**，甚至共享了很多代码。NEMU则是裁剪了QEMU。firecracker利用了Linux的功能，比如将block IO传给Linux kernel处理，Linux进程调度器和内存管理机制。firecracker可以用ps命令来可以查看所有MicroVM，还有如top，vmstat和kill命令都可以使用。firecracker基于Google的VMM crosvm实现的，复用了一些crosvm的组件。但firecracker比crosvm代码少一半。firecracker提供了有限的设备模拟：网络和block设备、串口和部分i8042。firecracker在网络和block模拟中使用了virtio，virtio block实现用了1400行代码。选择用block设备而不是文件系统，是因为**文件系统代码量大且复杂**。仅向用户提供block IO可以更好地保护主机kernel。
+</br></br>
+**内部架构**
+微虚拟机的创建需要两个组件：jailer和firecrakcer。**Jailer负责利用Linux提供的机制来创建沙箱环境，然后在沙箱环境中启动后者**。后者利用KVM来创建极度精简的虚拟机。
+![](https://github.com/CJTSAJ/BareMetal/blob/master/picture/firecracker%20structure.png)
+</br></br>
+
+**微虚拟机模型**
+Firecracker**利用了硬件辅助虚拟化**。从虚拟化的角度看恶意分为如下几个方面：
+- CPU/Memory：**利用VT-x进行CPU虚拟化和内存虚拟化**
+- 设备模拟：virtio-net、virtio-block、console、keyboard、irqchip、clock source
 
 ### 容器原理
 容器的本质是一个进程，容器壁虚拟化启动快很多，内存开销也小很多。主要利用Linux的Cgroups技术对进程进行资源限制。
