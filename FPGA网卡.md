@@ -26,3 +26,33 @@ http://bestwode.com/sma/430348.html
 虽然SoC FPGA芯片上既包含了有ARM，又包含了有FPGA，但是**两者一定程度上是相互独立的**，SoC芯片上的ARM处理器核并非是包含于FPGA逻辑单元内部的，FPGA和ARM（HPS）处理器只是封装到同一个芯片中，
 JTAG接口、电源引脚和外设的接口引脚都是独立的，因此，如果使用SoC FPGA芯片进行设计，即使不使用到片上的ARM处理器，**ARM处理器部分占用的芯片资源也无法释放出来，不能用作通用的FPGA资源**。
 
+### DPDK
+传统数据包处理方式存在以下两个难题
+- 每来一次报文，就触发一次中断。大量数据的到来会导致频繁的中断触发，系统承受不了如此频繁的中断。
+- 数据包需要从内核态拷贝到用户态，当数据量巨大时，这个拷贝操作会大幅的降低数据包处理性能。
+
+核心技术
+- 通过UIO技术将报文拷贝到应用空间处理。DPDK针对Intel网卡实现了基于轮询方式的**PMD（Poll Mode Drivers）驱动**，该驱动由API、用户空间运行的驱动程序构成，该驱动**使用无中断方式直接操作网卡的接收和发送队列**，减少了报文在用户空间和应用空间的多次拷贝。
+- 通过**大页内存，降低cache miss**，提高命中率，进而cpu访问速度
+- 通过CPU亲和性，绑定网卡和线程到固定的core，减少cpu任务切换
+- 通过无锁队列，减少资源竞争
+
+### OVS(Open VSwitch)
+虚拟交换机，绿色虚线内组成的就是一个虚拟网络了。其**虚拟机之间的信息交换都通过虚拟交换机**。</br>
+![](https://img-blog.csdn.net/20140917210046025)
+
+在SDN中所处的位置 </br>
+![](http://image-store1.oss-cn-hangzhou.aliyuncs.com/18-9-28/40575247.jpg)
+
+网络数据的转发，都是由位于内核空间的OVS datapath完成。用户空间和内核空间的信息是怎么同步的？对于一个网络数据流，**第一个数据包到达OVS datapath，这个时候的datapath没有转发信息**，并不知道怎么完成转发。接下来**OVS datapath会查询位于用户空间的ovs-vswitchd进程**。ovs-vswitchd进程因为有OpenFlow信息，可以根据OpenFlow规则完成match-action操作，也就是从一堆OpenFlow规则里面匹配网络数据包对应的规则，根据这些规则里的action实现转发。
+
+这样第一个数据包就完成了转发。与此同时，ovs-vswitchd会通过netlink向OVS datapath写入一条（也有可能是多条）转发规则,同一个网络数据流的后继网络数据包到达OVS datapath时，因为**已经有了转发规则，datapath就可以直接完成转发，不再需要向ovs-vswitchd查询**。</br>
+![](https://pic1.zhimg.com/80/v2-41387cfa250047521687a2536f5ef2d8_hd.jpg)
+
+- slow path: 通过ovs-vswitchd查找OpenFlow实现转发的路径称为slow-path
+- fast path: 通过OVS datapath直接转发的路径称为fast-path
+
+### Zero Copy
+zero copy技术就是减少不必要的内核缓冲区跟用户缓冲区间的拷贝，从而减少CPU的开销和内核态切换开销，达到性能的提升。</br>
+![](https://upload-images.jianshu.io/upload_images/207235-0c63dbf565386423.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/512/format/webp)
+![](https://upload-images.jianshu.io/upload_images/207235-bc756e05a212b2ef.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/429/format/webp)
