@@ -1,6 +1,10 @@
 ## Reference
 https://zhuanlan.zhihu.com/p/136767162
 
+两种模式
+- Virtualized environment
+- Bare metal
+
 ### 软核处理器
 基于FPGA的SOC片上系统设计技术，是使用FPGA的逻辑和资源搭建的一个软核CPU系统，由于是**使用FPGA的通用逻辑搭建的CPU**，
 因此具有一定的灵活性，用户可以根据自己的需求对CPU进行定制裁剪，增加一些专用功能，例如除法或浮点运算单元，
