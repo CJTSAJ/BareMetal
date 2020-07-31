@@ -1,5 +1,6 @@
 ## Reference
-https://zhuanlan.zhihu.com/p/136767162
+https://zhuanlan.zhihu.com/p/136767162 </br>
+http://bestwode.com/sma/430348.html
 
 两种模式
 - Virtualized environment
