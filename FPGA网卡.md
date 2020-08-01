@@ -37,6 +37,9 @@ JTAG接口、电源引脚和外设的接口引脚都是独立的，因此，如�
 - 通过CPU亲和性，绑定网卡和线程到固定的core，减少cpu任务切换
 - 通过无锁队列，减少资源竞争
 
+### vDPA(vhost datapath acceleration)
+vDPA是vhost datapath acceleration的缩写，意为vhost数据路径加速
+
 ### OVS(Open VSwitch)
 虚拟交换机，绿色虚线内组成的就是一个虚拟网络了。其**虚拟机之间的信息交换都通过虚拟交换机**。</br>
 ![](https://img-blog.csdn.net/20140917210046025)
