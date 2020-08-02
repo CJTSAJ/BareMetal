@@ -2,9 +2,23 @@
 https://zhuanlan.zhihu.com/p/136767162 </br>
 http://bestwode.com/sma/430348.html
 
+Cascade Glacier Version 3 Board，支持OVS offload到该硬件，有两个核，**一个ARM核(HPS)和一个FPGA核**。ARM核运行Wind River Linux 9 kernel 4.8，FPGA镜像存储在EPCQ Flash上，直接从该Flash上启动，可以通过HPS更新该镜像。
+![](https://github.com/CJTSAJ/BareMetal/blob/master/picture/%E6%99%BA%E8%83%BD%E7%BD%91%E5%8D%A1.png)
+
 两种模式
 - Virtualized environment
-- Bare metal
+- Bare metal：在该模式下，OVS的slow path运行在ARM核上
+
+硬件要求
+- PCIe 3.0 x8 or x16 slot
+- Operating temperature: 0 °C to 50 °C
+- Operating system dependency：CentOS 7.4(Kernel 3.10.0-693)，其它版本可能可以，但是还没有试过。
+
+- **ifc**：FPGA Device Driver，通过跟文件系统，用户可以配置VF的数量。
+- **ifc_pm**：Port Management on ARM
+
+### 启动
+用USB连接后，运行在ARM上的Linux自动开始运行DHCP客户端，用户可以通过ssh登录网卡。HPS和FPGA分别从各自的Flash启动镜像，
 
 ### 软核处理器
 基于FPGA的SOC片上系统设计技术，是使用FPGA的逻辑和资源搭建的一个软核CPU系统，由于是**使用FPGA的通用逻辑搭建的CPU**，
