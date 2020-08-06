@@ -58,6 +58,13 @@ vDPA是vhost datapath acceleration的缩写，意为vhost数据路径加速
 虚拟交换机，绿色虚线内组成的就是一个虚拟网络了。其**虚拟机之间的信息交换都通过虚拟交换机**。</br>
 ![](https://img-blog.csdn.net/20140917210046025)
 
+虽然在内核实现可以缩短网络数据包在操作系统的路径，但是在内核进行程序开发和更新也更加困难，**以OpenVSwitch的更新速度，完全在内核实现将变得不切实际**。其次，完全按照OpenFlow pipeline去处理网络包，势必要消耗大量CPU，进而降低网络性能。所以Openflow实现在用户态。
+
+OpenVSwitch主要由三个部分组成：
+- ovsdb-server：保存OpenVSwitch的持久化数据
+- ovs-vswitchd：运行在用户空间的转发程序，接收SDN控制器下发的OpenFlow规则。并且通知OVS内核模块该如何处理网络数据包。
+- OVS内核模块：运行在内核空间的转发程序，根据ovs-vswitchd的指示，处理网络数据包
+
 在SDN中所处的位置 </br>
 ![](http://image-store1.oss-cn-hangzhou.aliyuncs.com/18-9-28/40575247.jpg)
 
