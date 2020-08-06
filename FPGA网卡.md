@@ -2,7 +2,7 @@
 https://zhuanlan.zhihu.com/p/136767162 </br>
 http://bestwode.com/sma/430348.html
 
-Cascade Glacier Version 3 Board，支持OVS offload到该硬件，有两个核，**一个ARM核(HPS)和一个FPGA核**。ARM核运行Wind River Linux 9 kernel 4.8，FPGA镜像存储在EPCQ Flash上，直接从该Flash上启动，可以通过HPS更新该镜像。ARM系统用于管理网卡，包括镜像更新，配置等等。
+Cascade Glacier Version 3 Board，支持OVS offload到该硬件，有两个核，**一个ARM核(HPS)和一个FPGA核**。ARM核运行Wind River Linux 9 kernel 4.8，FPGA镜像存储在EPCQ Flash上，直接从该Flash上启动，可以通过HPS更新该镜像。ARM系统用于管理网卡，包括镜像更新，配置等等。最**主要的用途是用于运行OVS控制功能和slow path**。
 ![](https://github.com/CJTSAJ/BareMetal/blob/master/picture/%E6%99%BA%E8%83%BD%E7%BD%91%E5%8D%A1.png)
 
 两种模式
@@ -18,7 +18,7 @@ Cascade Glacier Version 3 Board，支持OVS offload到该硬件，有两个核�
 - **ifc_pm**：Port Management on ARM
 
 ### 启动
-用USB连接后，运行在ARM上的Linux自动开始运行DHCP客户端，用户可以通过ssh登录网卡。HPS和FPGA分别从各自的Flash启动镜像，
+用USB连接后，运行在ARM上的Linux自动开始运行DHCP客户端，用户可以通过ssh登录网卡。HPS和FPGA分别从各自的Flash启动镜像。ARM核有两个镜像，如果一个镜像坏了就用另一个镜像。
 
 ### 软核处理器
 基于FPGA的SOC片上系统设计技术，是使用FPGA的逻辑和资源搭建的一个软核CPU系统，由于是**使用FPGA的通用逻辑搭建的CPU**，
