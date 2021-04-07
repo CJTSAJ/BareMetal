@@ -1,0 +1,9 @@
+## new in hardware
+### new in device
+- ADI(assignable device interface):最小的硬件单元，只能通过mmio映射
+- IMS(interrupt message storage): MSI-x仅支持2048个中断
+
+### new in cpu
+- intel VT-d scalable mode
+
+## new software achitechture in linux
