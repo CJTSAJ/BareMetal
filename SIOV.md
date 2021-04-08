@@ -20,3 +20,11 @@ ATS的思想：每个PCIe设备都有自己的ATC(Address Translation Cache)，�
 ![](http://liujunming.top/images/2019/11/9.PNG)
 
 详情见[Address Translation Services, Revision 1.1](https://composter.com.ua/documents/ats_r1.1_26Jan09.pdf) p11 to p12
+
+## VT-d scalable mode
+[reference](https://www.cnblogs.com/haiyonghao/p/14440767.html)
+### 1. legacy mode
+![](https://img2020.cnblogs.com/blog/2262526/202102/2262526-20210228212927791-160641719.png)
+
+### 2. scalable mode
+![](https://img2020.cnblogs.com/blog/2262526/202102/2262526-20210228212906550-354955558.png)
