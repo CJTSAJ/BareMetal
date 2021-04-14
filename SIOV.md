@@ -35,3 +35,5 @@ ATS的思想：每个PCIe设备都有自己的ATC(Address Translation Cache)，�
 
 
 - mailbox: 有时候VF driver需要和PF driver通信；由mailbox buffer和mailbox register组成，buffer用来写信息，register用来同步和通知；当VF分配给一个VM时，其中一个VF资源就是mailbox，这个mailbox，VF 和 PF都可以访问，
+
+- PCIe ATU(Address translation unit): 负责把cpu域的物理地址转换到PCI域的总线地址
