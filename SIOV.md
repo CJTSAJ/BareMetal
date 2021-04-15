@@ -51,5 +51,8 @@ ATS的思想：每个PCIe设备都有自己的ATC(Address Translation Cache)，�
 ice_module_init()->pci_register_driver()->ice_probe()->ice_vdcm_probe()
 - pci_register_driver()：根据vendor_id和device_id(在pci_driver结构id_table中)去匹配设备，**系统在bus总线的数据结构中维护两个结构体struct kset drivers和struct kset devices**，一个方驱动，一个放设备信息。driver和device attach后，后调用driver probe函数
 
-### 2. 
+### 2. ice.ko注册parent_dev
 ice_vdcm_probe()->mdev_register_device()：设备驱动向内核mdev模块注册parent mdev
+
+### 3. 向mdev目录create mdev
+mdev_register_device(&pdev->dev, &ice_vdcm_mdev_ops)注册父设备时，ice_vdcm_mdev_ops中create与ice_vdcm_mdev_create()绑定。所以create调用ice_vdcm_mdev_create()
