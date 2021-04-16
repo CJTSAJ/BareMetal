@@ -57,5 +57,11 @@ ice_vdcm_probe()->mdev_register_device()：设备驱动向内核mdev模块注册
 ### 3. 向mdev目录create mdev
 mdev_register_device(&pdev->dev, &ice_vdcm_mdev_ops)注册父设备时，ice_vdcm_mdev_ops中create与ice_vdcm_mdev_create()绑定。所以create调用ice_vdcm_mdev_create(struct kobject *kobj, struct mdev_device *mdev)
 
+ice_vdcm_mdev_create()->ice_vdcm_create_config_space(ivdm)初始化vdev配置空间
+
 
 struct kobject是组成设备device、驱动driver、总线bus、class的基本结构。相当于基类
+
+
+struct vdcm
+  - u8 *vconfig : vdev的配置空间
