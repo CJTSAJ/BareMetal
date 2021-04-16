@@ -71,3 +71,7 @@ devm_kcalloc(struct device * dev, size_t n, size_t size, gfp_t flags): 具有资
 
 struct vdcm
   - u8 *vconfig : vdev的配置空间
+
+
+### question
+enum ice_vsi_type (no defined?)
