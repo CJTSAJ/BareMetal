@@ -63,7 +63,7 @@ ice_vdcm_mdev_create()->ice_vdcm_create_config_space(ivdm)初始化vdev配置空
 struct kobject是组成设备device、驱动driver、总线bus、class的基本结构。相当于基类
 
 
-devm_kcalloc: 具有资源管理的 kzalloc()，分配的内存与设备相关联，当设备从系统中detach时，会自动释放这部分内存
+devm_kcalloc(struct device * dev, size_t n, size_t size, gfp_t flags): 具有资源管理的 kzalloc()，分配的内存与设备相关联，当设备从系统中detach时，会自动释放这部分内存，n位元素数量，size位元素大小
 
 struct vdcm
   - u8 *vconfig : vdev的配置空间
