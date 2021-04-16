@@ -59,6 +59,10 @@ mdev_register_device(&pdev->dev, &ice_vdcm_mdev_ops)注册父设备时，ice_vdc
 
 ice_vdcm_mdev_create()->ice_vdcm_create_config_space(ivdm)初始化vdev配置空间
 
+### 4. ice_vdcm_mdev_open
+分配VSI
+ice_vdcm_mdev_open()->ice_siov.c: ice_adi_vsi_setup()->ice_lib: ice_vsi_setup()
+
 
 struct kobject是组成设备device、驱动driver、总线bus、class的基本结构。相当于基类
 
