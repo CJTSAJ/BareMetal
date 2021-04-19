@@ -62,8 +62,12 @@ ice_vdcm_mdev_create()->ice_vdcm_create_config_space(ivdm)初始化vdev配置空
 
 ### 4. ice_vdcm_mdev_open
 分配VSI
-ice_vdcm_mdev_open()->ice_siov.c: ice_adi_vsi_setup()->ice_lib: ice_vsi_setup()
+ice_vdcm_mdev_open()->ice_siov.c: ice_adi_vsi_setup()->ice_lib.c: ice_vsi_setup()->ice_lib.c: ice_vsi_alloc()->ice_lib.c: ice_vsi_set_num_qs()
 
+- struct ice_vsi *ice_adi_vsi_setup(struct ice_pf *pf, u32 pasid_id): 为一个ADI设置VSI
+- struct ice_vsi *ice_vsi_setup(struct ice_pf *pf, struct ice_port_info *pi, enum ice_vsi_type vsi_type, u16 vf_id, u32 pasid_id)： 分配VSI struct以及queue资源 
+- static struct ice_vsi *ice_vsi_alloc(struct ice_pf *pf, enum ice_vsi_type vsi_type, u16 __always_unused vf_id): 分配PF中的下一个VSI(pf->next_vsi是一个整数index)
+- static void ice_vsi_set_num_qs(struct ice_vsi *vsi, u16 __always_unused vf_id): 设置queue, descriptor和vector的数量，目前硬编码为1
 
 struct kobject是组成设备device、驱动driver、总线bus、class的基本结构。相当于基类
 
