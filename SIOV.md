@@ -33,6 +33,7 @@ ATS的思想：每个PCIe设备都有自己的ATC(Address Translation Cache)，�
 - VEB(Virtual Edge Bridge): 
 - VEPA(virtual Ethernet port aggregator)
 - VSI(virtual station interface):一个vNIC有一个VSI，并且通过VSI连接VEB
+- FDIR(flow director)
 
 
 - mailbox: 有时候VF driver需要和PF driver通信；由mailbox buffer和mailbox register组成，buffer用来写信息，register用来同步和通知；当VF分配给一个VM时，其中一个VF资源就是mailbox，这个mailbox，VF 和 PF都可以访问，
@@ -68,6 +69,10 @@ struct kobject是组成设备device、驱动driver、总线bus、class的基本�
 
 
 devm_kcalloc(struct device * dev, size_t n, size_t size, gfp_t flags): 具有资源管理的 kzalloc()，分配的内存与设备相关联，当设备从系统中detach时，会自动释放这部分内存，n位元素数量，size位元素大小
+
+struct ice_vsi
+  - rx_rings
+  - tx_rings : 传输数据队列，目前硬编码为1
 
 struct vdcm
   - u8 *vconfig : vdev的配置空间
