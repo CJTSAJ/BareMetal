@@ -36,7 +36,7 @@ ATS的思想：每个PCIe设备都有自己的ATC(Address Translation Cache)，�
 - FDIR(flow director)
 
 
-- mailbox: 有时候VF driver需要和PF driver通信；由mailbox buffer和mailbox register组成，buffer用来写信息，register用来同步和通知；当VF分配给一个VM时，其中一个VF资源就是mailbox，这个mailbox，VF 和 PF都可以访问，
+- mailbox: 有时候VF driver需要和PF driver通信；由mailbox buffer和mailbox register组成，buffer用来写信息，register用来同步和通知；当VF分配给一个VM时，其中一个VF资源就是mailbox，这个mailbox，VF 和 PF都可以访问。所有的vdev的mailbox都映射在pf的0x02000000处，一个vdev的mailbox占4k空间
 
 
 ###   PCIe
