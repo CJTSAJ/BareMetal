@@ -77,6 +77,7 @@ devm_kcalloc(struct device * dev, size_t n, size_t size, gfp_t flags): 具有资
 struct ice_vsi
   - rx_rings
   - tx_rings : 传输数据队列，目前硬编码为1
+  - num_q_vectors: 一个queue，对应一个q_vectors(用于中断)
 
 struct vdcm
   - u8 *vconfig : vdev的配置空间
