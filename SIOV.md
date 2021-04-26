@@ -62,12 +62,13 @@ ice_vdcm_mdev_create()->ice_vdcm_create_config_space(ivdm)初始化vdev配置空
 
 ### 4. ice_vdcm_mdev_open
 分配VSI
-ice_vdcm_mdev_open()->ice_siov.c: ice_adi_vsi_setup()->ice_lib.c: ice_vsi_setup()->ice_lib.c: ice_vsi_alloc()->ice_lib.c: ice_vsi_set_num_qs()
+ice_vdcm_mdev_open()->ice_siov.c: ice_adi_vsi_setup()->ice_lib.c: ice_vsi_setup()->ice_lib.c: ice_vsi_alloc()->ice_lib.c: ice_vsi_set_num_qs()->ice_lib.c：ice_vsi_set_num_desc()
 
 - struct ice_vsi *ice_adi_vsi_setup(struct ice_pf *pf, u32 pasid_id): 为一个ADI设置VSI
 - struct ice_vsi *ice_vsi_setup(struct ice_pf *pf, struct ice_port_info *pi, enum ice_vsi_type vsi_type, u16 vf_id, u32 pasid_id)： 分配VSI struct以及queue资源 
 - static struct ice_vsi *ice_vsi_alloc(struct ice_pf *pf, enum ice_vsi_type vsi_type, u16 __always_unused vf_id): 分配PF中的下一个VSI(pf->next_vsi是一个整数index)
 - static void ice_vsi_set_num_qs(struct ice_vsi *vsi, u16 __always_unused vf_id): 设置queue, descriptor和vector的数量，目前queue和vector硬编码为1，
+- static void ice_vsi_set_num_desc(struct ice_vsi *vsi)：为这个VSI的queue设置descriptor数量，目前都为default值，rx为2048，tx为256个descriptor；(descriptor需要guest去设置地址)
 
 
 - ice_set_ringparam((struct net_device *netdev, struct ethtool_ringparam *ring)：guest通过ice_ethtool_ops调用，设置ring的参数，其中包括每个descriptor的信息
@@ -80,8 +81,10 @@ rings
 devm_kcalloc(struct device * dev, size_t n, size_t size, gfp_t flags): 具有资源管理的 kzalloc()，分配的内存与设备相关联，当设备从系统中detach时，会自动释放这部分内存，n位元素数量，size位元素大小
 
 struct ice_vsi
+  - alloc_txq
+  - alloc_rxq：分配的数据队列的数量，目前硬编码为1
   - rx_rings
-  - tx_rings : 传输数据队列，目前硬编码为1
+  - tx_rings : 
   - num_q_vectors: 一个queue，对应一个q_vectors(interrupt vector)
 
 struct vdcm
