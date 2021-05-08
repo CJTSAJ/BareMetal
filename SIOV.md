@@ -9,6 +9,13 @@
 ## new software achitechture in linux
 
 
+## 热迁移脏页记录
+KVM脏页统计离不开**硬件支持**，它依赖Intel PML(Page Modification Logging)特性。该特性的主要功能是记录虚机写内存页的行为并将内存页的地址GPA记录下来。
+
+- PML
+  - Accessed and Dirty flags：是EPTP字段中位于bit 6的一个标志位，当设置此标志位后，它告诉CPU**每当使用EPT查询HPA时，将页结构存放的表项中的Accessed位(bit 8)置1，对于指向物理页的页表项，当往指向的物理页中写数据时，将它的Dirty位(bit 9)置1**。
+  - PML Buffer：一块内存区域，用来存放上一次开启PML特性之后，CPU写过的物理页的地址，大小为4K，可以存放512条GPA。KVM就是通过这个区域来跟踪内存脏页。Buffer满了会VM Exit，KVM保存buffer的内容，然后将buffer清空
+
 
 ## PCIe ATS(Address Translation Services)
 ### 1. motivation
