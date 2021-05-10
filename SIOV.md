@@ -17,6 +17,14 @@ KVM脏页统计离不开**硬件支持**，它依赖Intel PML(Page Modification 
   - PML Buffer：一块内存区域，用来存放上一次开启PML特性之后，CPU写过的物理页的地址，大小为4K，可以存放512条GPA。KVM就是通过这个区域来跟踪内存脏页。Buffer满了会VM Exit，KVM保存buffer的内容，然后将buffer清空
 
 
+## devlink
+- devlink-info：enable device driver to report device information in a standard
+- devlink-region
+- devlink-params: 设置设备参数，比如是否enable SR-IOV，是否enable region的snapshot
+- devlink-flash: allow updating device firmware
+  - example: $ devlink dev flash pci/0000:05:00.0 file flash-boot.bin
+
+
 ## PCIe ATS(Address Translation Services)
 ### 1. motivation
 iotlb会被多个IO设备同时访问，这种集中式的iotlb会影响系统的性能
