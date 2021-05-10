@@ -19,7 +19,7 @@ KVM脏页统计离不开**硬件支持**，它依赖Intel PML(Page Modification 
 
 ## devlink
 - devlink-info：enable device driver to report device information in a standard
-- devlink-region
+- devlink-region：access driver defined address regions
 - devlink-params: 设置设备参数，比如是否enable SR-IOV，是否enable region的snapshot
 - devlink-flash: allow updating device firmware
   - example: $ devlink dev flash pci/0000:05:00.0 file flash-boot.bin
