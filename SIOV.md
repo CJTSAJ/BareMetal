@@ -106,6 +106,12 @@ struct vdcm
   - u8 *vconfig : vdev的配置空间
 
 ### 为mdev创建属性
+#### sysfs 创建属性文件函数
+- __kernfs_create_file: 在目录下创建一个文件
+
+#### sysfs写属性文件逻辑
+fs/kernfs/file.c:kernfs_fop_write_iter()->(ops->write())->sysfs_kf_write()->(ops->store())
+
 ice_vdcm_probe()->mdev_register_device(pdev->dev, &ice_vdcm_mdev_ops)
 
 - ice_vdcm_mdev_ops
