@@ -105,6 +105,11 @@ struct ice_vsi
 struct vdcm
   - u8 *vconfig : vdev的配置空间
 
+### 为mdev创建属性
+有很多组attr_groups，每一个group包含不同的属性，这些属性会在sysfs目录下创建文件
+- ice_vdcm.c:
+  - static struct attribute *mdev_types_attrs
+
 
 ### question
 enum ice_vsi_type (no defined?)
