@@ -106,6 +106,11 @@ struct vdcm
   - u8 *vconfig : vdev的配置空间
 
 ### 为mdev创建属性
+ice_vdcm_probe()->mdev_register_device(pdev->dev, &ice_vdcm_mdev_ops)
+
+- ice_vdcm_mdev_ops
+  - .supported_type_groups  = ice_vdcm_mdev_type_groups
+
 有很多组attr_groups，每一个group包含不同的属性，这些属性会在sysfs目录下创建文件
 - ice_vdcm.c:
   - static struct attribute *mdev_types_attrs
