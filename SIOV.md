@@ -106,6 +106,11 @@ struct vdcm
   - u8 *vconfig : vdev的配置空间
 
 ### 为mdev创建属性
+以下三个宏定义都会为MDEV创建一个属性文件，属性变量名为mdev_type_attr_\*\*name
+- MDEV_TYPE_ATTR_WO(name)
+- MDEV_TYPE_ATTR_RO(name)
+- MDEV_TYPE_ATTR_RW(name)
+
 #### sysfs 创建属性文件函数
 - __kernfs_create_file: 在目录下创建一个文件
 
