@@ -8,6 +8,16 @@
 
 ## new software achitechture in linux
 
+## device iotlb
+PCIe ATS的宗旨就是让每个设备都有自己的cache，这样可以加速DMA的地址翻译过程；
+
+
+当PCIe Device的ATC无法完成地址映射时，此刻就需要PCIe Device发送ATS Request给TA。TA完成地址映射后，会将结果返还给PCIe Device，这样，PCIe Device中的ATC就有地址映射项了。
+
+
+当TA中对内存地址更改之后，会发送**ATS Invalidate Request**给PCIe Device，Device会取消该映射项，并将结果返还给TA。
+
+![](http://file.elecfans.com/web1/M00/BB/5C/o4YBAF6qf5qAZk5AAAIWxCSIwTI240.png)
 
 ## 热迁移脏页记录
 KVM脏页统计离不开**硬件支持**，它依赖Intel PML(Page Modification Logging)特性。该特性的主要功能是记录虚机写内存页的行为并将内存页的地址GPA记录下来。
