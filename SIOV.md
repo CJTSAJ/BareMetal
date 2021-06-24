@@ -8,6 +8,10 @@
 
 ## new software achitechture in linux
 
+
+## iotlb
+对于CPU的TLB是不共享的，即一个多个处理器，每个核都有自己的tlb，所以如果对同一个核切换不同的进程会导致刷TLB，但是切换同一个进程的不同线程不同刷tlb。但是对于**iommu的iotlb是共享资源**，
+
 ## device iotlb
 PCIe ATS的宗旨就是让每个设备都有自己的cache，这样可以加速DMA的地址翻译过程；
 
