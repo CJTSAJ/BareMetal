@@ -9,6 +9,12 @@
 ## new software achitechture in linux
 
 
+## CPU 两级地址翻译
+内存虚拟化现在一般采用两级地址翻译，EPT。<\br>
+但是两级地址翻译会导致多次内存 访问，因为GVA->GPA的页表，每个页表地址是GPA，而GPA需要翻译成HPA，所以开销比较大。<\br>
+
+CR3和EPT都有TLB，会加速这一过程
+
 ## iotlb
 对于CPU的TLB是不共享的，即一个多个处理器，每个核都有自己的tlb，所以如果对同一个核切换不同的进程会导致刷TLB，但是切换同一个进程的不同线程不同刷tlb。但是对于**iommu的iotlb是共享资源**，
 
