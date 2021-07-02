@@ -131,7 +131,7 @@ struct vdcm
 
 
 ### 中断缩写
-- ITR(Interrupt Throttling)
+- ITR(Interrupt Throttling)：每个中断有三个对应的寄存器，每个寄存器4bit，总共12个bit组成一个数字，interval的值范围0微秒到8160(0xFF0)微秒
 - INTRL(Interrupt Rate Limiting)
 - PBA(Pending Bit Array): 中断进来对应的bit设置为1，中断发送到pcie后，清零
 - QTX_TAIL寄存器存的是指向tx buffer的指针，支持2048个，2048*8=16KB，对于QRX_TAIL同理
