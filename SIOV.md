@@ -131,8 +131,9 @@ struct vdcm
 
 
 ### 中断缩写
-ITR(Interrupt Throttling)
-INTRL(Interrupt Rate Limiting)
+- ITR(Interrupt Throttling)
+- INTRL(Interrupt Rate Limiting)
+- PBA(Pending Bit Array): 中断进来对应的bit设置为1，中断发送到pcie后，清零
 
 ### 为mdev创建属性
 mdev的子设备会继承父设备的supported_type_groups，经验证对子设备做写操作，callback function传入的kobj和vdev是相同的地址(应该都是父设备) </br>
