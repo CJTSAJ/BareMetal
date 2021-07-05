@@ -130,12 +130,14 @@ struct vdcm
 - ice_update_eth_stats(struct ice_vsi *vsi)
 
 
-### 中断缩写
+
+### 中断
 - ITR(Interrupt Throttling)：每个中断有三个对应的寄存器，每个寄存器4bit，总共12个bit组成一个数字，interval的值范围0微秒到8160(0xFF0)微秒
 - INTRL(Interrupt Rate Limiting)
 - PBA(Pending Bit Array): 中断进来对应的bit设置为1，中断发送到pcie后，清零
 - QTX_TAIL寄存器存的是指向tx buffer的指针，支持2048个，2048*8=16KB，对于QRX_TAIL同理
 - VFIO_IRQ_SET_ACTION_TRIGGER: trigger interrupt
+- vsi->q_vectors 有17个，一个mailbox vector，16个queue中断
 
 ### 为mdev创建属性
 mdev的子设备会继承父设备的supported_type_groups，经验证对子设备做写操作，callback function传入的kobj和vdev是相同的地址(应该都是父设备) </br>
