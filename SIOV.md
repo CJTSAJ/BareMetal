@@ -138,6 +138,7 @@ struct vdcm
 - QTX_TAIL寄存器存的是指向tx buffer的指针，支持2048个，2048*8=16KB，对于QRX_TAIL同理
 - VFIO_IRQ_SET_ACTION_TRIGGER: trigger interrupt
 - vsi->q_vectors 有17个，一个mailbox vector，16个queue中断
+- qemu通过ioctl配置Msi-x中断的trigger(传入参数eventfd对应的fd)
 
 ### 为mdev创建属性
 mdev的子设备会继承父设备的supported_type_groups，经验证对子设备做写操作，callback function传入的kobj和vdev是相同的地址(应该都是父设备) </br>
