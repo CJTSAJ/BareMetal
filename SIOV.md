@@ -140,6 +140,14 @@ struct vdcm
 - vsi->q_vectors 有17个，一个mailbox vector，16个queue中断
 - qemu通过ioctl配置Msi-x中断的trigger(传入参数eventfd对应的fd)
 
+
+### 中断调用栈
+vfio_pci_ioctl </br>
+vfio_pci_set_irqs_ioctl </br>
+vfio_pci_set_msi_trigger </br>
+vfio_msi_set_block </br>
+vfio_msi_set_vector_signal：为每个msi中断安排其Host IRQ的信号处理钩子，用来完成中断注入。
+
 ### 为mdev创建属性
 mdev的子设备会继承父设备的supported_type_groups，经验证对子设备做写操作，callback function传入的kobj和vdev是相同的地址(应该都是父设备) </br>
 可以通过mdev_attr_groups添加新的属性，对通过该方法添加的属性进行操作，传进来的参数kobj每个mdev是不同的，但是dev参数相同属性是一样的
