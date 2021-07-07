@@ -151,7 +151,9 @@ vfio_msi_set_vector_signal：为每个msi中断安排其Host IRQ的信号处理�
 #### posted interrupt
 irq_bypass_register_producer 通过IRQ bypass manager将producer和consumer连接起来 </br>
 
-通过遍历consumers链表内的consumer，比对每一个token是否与producer的token相同，相同则调用connect进行配对，token的值一般为trigger(struct eventfd_ctx *)
+通过遍历consumers链表内的consumer，比对每一个token是否与producer的token相同，相同则调用connect进行配对，token的值一般为trigger(struct eventfd_ctx *) </br>
+
+__connect(prod, cons)会去更新IRTE表项
 
 ### 为mdev创建属性
 mdev的子设备会继承父设备的supported_type_groups，经验证对子设备做写操作，callback function传入的kobj和vdev是相同的地址(应该都是父设备) </br>
